@@ -37,17 +37,18 @@ export default function Shapes({ paint, node }) {
               <g>
                 <rect
                   x={shape.x}
-                  y={shape.y / 2.5}
+                  y={shape.y - shape.width / 2}
                   height={shape.height}
                   width={shape.width}
                   fill={shape.fill}
                 />
                 <text
-                  x={shape.x + 11}
+                  x={shape.x + 12}
                   y={shape.y}
                   font-size='12'
                   dominant-baseline='middle'
                   stroke='white'
+                  ext-anchor='middle'
                 >
                   {shape.text}
                 </text>
