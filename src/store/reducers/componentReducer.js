@@ -1,33 +1,6 @@
-export const arrowLine = (x1Value, x2Value, yValue, position) => {
-  return {
-    position,
-    type: "line",
-    x1: x1Value,
-    y1: yValue,
-    x2: x2Value,
-    y2: yValue,
-    stroke: "black",
-  }
-}
-
-export const unzip = (xValue, id) => {
-  return { id, type: "rect", x: xValue, y: 80, width: 100, height: 100 }
-}
-
-export const rectAction = (position, xValue, yValue, text, fill) => {
-  return {
-    position,
-    type: "rect",
-    x: xValue,
-    y: yValue,
-    width: 100,
-    height: 100,
-    fill,
-    text,
-  }
-}
-
-export const components = [
+import { act } from "react-dom/test-utils"
+import { foreach } from "lodash"
+const initialState = [
   {
     id: 1,
     position: 1,
@@ -117,3 +90,25 @@ export const components = [
     disabled: false,
   },
 ]
+
+const componentReducer = (state = initialState, action) => {
+  const { requiredFor } = action
+  const components = { ...state }
+  switch (action.type) {
+    case "ENABLE_BUTTON":
+      foreach(components, (component) => {
+        if (component.position === requiredFor) {
+          component.disabled = false
+        }
+      })
+      return {
+        ...state,
+        components,
+      }
+
+    default:
+      return state
+  }
+}
+
+export default componentReducer

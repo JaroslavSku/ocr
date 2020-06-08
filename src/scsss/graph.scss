@@ -1,0 +1,117 @@
+.shapes {
+  &-bubble {
+    display: flex;
+    flex-wrap: wrap;
+    position: relative;
+    top: 0;
+    left: 0;
+    // position: absolute;
+    // flex-direction: column;
+    z-index: 10;
+    width: 15rem;
+    // height: 6rem;
+    // height: 30rem;
+
+    background-color: darkgray;
+    font-size: 1rem;
+    border-radius: 2px;
+  }
+  &-bubble:after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border: 20px solid transparent;
+    border-top-color: darkgray;
+    border-bottom: 0;
+    border-left: 0;
+    margin-left: -10px;
+    margin-bottom: -20px;
+  }
+  &-button {
+    position: relative;
+    color: white;
+    background-color: black;
+    border: none;
+    height: 1.8rem;
+    width: 1.8rem;
+    margin: 0.5rem;
+    &:hover {
+    }
+    &:disabled {
+      background-color: grey;
+    }
+    img {
+      z-index: 8;
+      width: 1rem;
+      height: 1rem;
+      background-color: white;
+    }
+  }
+  &-drawings {
+    // position: relative;
+  }
+  &-tooltip {
+    position: absolute;
+    visibility: hidden;
+    left: 0;
+    top: 0;
+    border-radius: 5px;
+    z-index: 2;
+    // display: none;
+    font-size: 0.6rem;
+    padding: 0.2rem;
+    background-color: white;
+  }
+  &-button:hover &-tooltip {
+    visibility: visible;
+    // display: block;
+    color: black;
+  }
+}
+.svg {
+  &-plus {
+    opacity: 1;
+    font-size: 1rem;
+    font-weight: bolder;
+    color: rebeccapurple;
+
+    // transform: translate(100%, 100%);
+  }
+}
+
+.svg-plus {
+  display: none;
+}
+
+// #rect1:hover + body.svg-plus {
+//   display: fixed;
+// }
+// #rect1:hover + text {
+//   display: none;
+// }
+
+.svg-text {
+  opacity: 0.01;
+  transition: opacity 0.5s ease-in-out;
+}
+
+#rect1:hover + .svg-text {
+  opacity: 1;
+}
+.svg-text:hover {
+  opacity: 1;
+}
+.App {
+  background-color: silver;
+  /* display: flex; */
+  /* width: 50rem; */
+  width: 100rem;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+}

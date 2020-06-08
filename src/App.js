@@ -1,9 +1,13 @@
 import React, { useState } from "react"
 import logo from "./logo.svg"
 import "./App.css"
-import Shapes from "././Shapes"
+import "./scsss/styles.scss"
+import Draw from "./Draw"
 import { map, find } from "lodash"
 import { rectAction, arrowLine, components } from "./shapes"
+import { useSelector } from "react-redux"
+import { enableButton } from "./store/actions/componentActions"
+
 function App() {
   const [paint, setPaint] = useState([
     {
@@ -15,7 +19,7 @@ function App() {
           id: 1,
           position: 0,
           type: "rect",
-          x: 10,
+          x: 50,
           y: 200,
           width: 100,
           height: 100,
@@ -23,6 +27,8 @@ function App() {
       ],
     },
   ])
+  const { xPosition, yPosition } = useSelector((state) => state.menu)
+  console.log("App.js", xPosition, yPosition)
   // const [xValue, setXVaue] = useState(200)
   // let xValue = 200
   const initialNode = 0
@@ -49,7 +55,7 @@ function App() {
     })
   }
 
-  function addCustomRectangle(color, text, position, requiredFor) {
+  async function addCustomRectangle(color, text, position, requiredFor) {
     const { xValue, yValue } = paint[initialNode] //200
     const newX2 = xValue + 100 //300
     const newWithRectangle = newX2 + 100
@@ -59,11 +65,13 @@ function App() {
       paint[initialNode].shapes,
       (shape) => shape.position === requiredFor
     )
-
+    //prepocitani
     console.log("requirements", requirementFullfilled)
     if (!requirementFullfilled) {
       alert(`You need to add element${requiredFor}`)
     } else {
+      // set disabled to false redux
+      await enableButton(requiredFor)
       const newShapes = [
         ...paint[initialNode].shapes,
         arrowLine(xValue, newX2, yValue, position),
@@ -109,23 +117,38 @@ function App() {
 
   return (
     <div onDoubleClick={deleteLast} className='App'>
-      {map(components, (component) => {
-        return (
-          <button
-            onClick={() =>
-              addCustomRectangle(
-                component.color,
-                component.name,
-                component.position,
-                component.requiredFor
-              )
-            }
-          >
-            {component.id} {component.name}
-          </button>
-        )
-      }).splice(getLastElementId())}
-      <Shapes paint={paint} node={0} />
+      <div
+        style={{ left: xPosition, top: yPosition }}
+        className='shapes-bubble'
+      >
+        {map(components, (component) => {
+          return (
+            <div>
+              {" "}
+              <button
+                className='shapes-button'
+                disabled={false}
+                onClick={() =>
+                  addCustomRectangle(
+                    component.color,
+                    component.name,
+                    component.position,
+                    component.requiredFor,
+                    component.disabled
+                  )
+                }
+              >
+                {/* {component.id} */}
+                <img src={require(`./assets/${component.name}.svg`)} />
+                <div className='shapes-tooltip'>{component.name}</div>
+              </button>
+            </div>
+          )
+        }).splice(getLastElementId())}
+      </div>
+      <div className='shapes-drawings'>
+        <Draw paint={paint} node={0} />
+      </div>
     </div>
   )
 }
