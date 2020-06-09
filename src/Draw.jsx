@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { useDispatch } from "react-redux"
 import { updatePosition } from "./store/actions/menuAction"
+import { isEmpty } from "lodash"
 
 export default function Draw({ paint, node }) {
   const [leftPosition, setLeftPosition] = useState(10)
@@ -45,6 +46,41 @@ export default function Draw({ paint, node }) {
                 stroke={shape.stroke}
                 marker-end='url(#arrow)'
               />
+            )
+          }
+          if (shape.type === "rect" && !isEmpty(shape.types)) {
+            return (
+              <g>
+                <rect
+                  id='rect1'
+                  x={shape.x}
+                  y={shape.y - shape.width / 2}
+                  height={shape.height}
+                  width={shape.width}
+                  fill={shape.fill}
+                />
+                {}
+                <g>
+                  <line
+                    x1={shape.x}
+                    y1={shape.y}
+                    x2={shape.x + 150}
+                    y2={shape.y}
+                    stroke={shape.fill}
+                    marker-end='url(#arrow)'
+                  />
+                  <text
+                    x={shape.x + shape.width + 25}
+                    y={shape.y}
+                    font-size='10'
+                    dominant-baseline='middle'
+                    stroke='white'
+                    text-anchor='middle'
+                  >
+                    XML
+                  </text>
+                </g>
+              </g>
             )
           }
           if (shape.type === "rect") {

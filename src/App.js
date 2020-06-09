@@ -4,9 +4,9 @@ import "./App.css"
 import "./scsss/styles.scss"
 import Draw from "./Draw"
 import { map, find } from "lodash"
-import { rectAction, arrowLine, components } from "./shapes"
-import { useSelector } from "react-redux"
-import { enableButton } from "./store/actions/componentActions"
+import { rectAction, arrowLine } from "./shapes"
+import { useSelector, useDispatch } from "react-redux"
+import { enableButton, disableButton } from "./store/actions/componentActions"
 
 function App() {
   const [paint, setPaint] = useState([
@@ -23,11 +23,14 @@ function App() {
           y: 200,
           width: 100,
           height: 100,
+          fill: "black",
         },
       ],
     },
   ])
   const { xPosition, yPosition } = useSelector((state) => state.menu)
+  const components = useSelector((state) => state.components)
+  const dispatch = useDispatch()
   console.log("App.js", xPosition, yPosition)
   // const [xValue, setXVaue] = useState(200)
   // let xValue = 200
@@ -55,23 +58,23 @@ function App() {
     })
   }
 
-  async function addCustomRectangle(color, text, position, requiredFor) {
+  async function addCustomRectangle(color, text, position, prerequisite) {
     const { xValue, yValue } = paint[initialNode] //200
     const newX2 = xValue + 100 //300
     const newWithRectangle = newX2 + 100
     // const savedX = xValue + newX
-    console.log("this is required for value", requiredFor)
+    console.log("this is required for value", prerequisite)
     const requirementFullfilled = find(
       paint[initialNode].shapes,
-      (shape) => shape.position === requiredFor
+      (shape) => shape.position === prerequisite
     )
     //prepocitani
     console.log("requirements", requirementFullfilled)
     if (!requirementFullfilled) {
-      alert(`You need to add element${requiredFor}`)
+      alert(`You need to add element${prerequisite}`)
     } else {
       // set disabled to false redux
-      await enableButton(requiredFor)
+      await dispatch(enableButton(position))
       const newShapes = [
         ...paint[initialNode].shapes,
         arrowLine(xValue, newX2, yValue, position),
@@ -98,13 +101,16 @@ function App() {
     const maxVal = Math.max(
       ...paint[initialNode].shapes.map((shape) => shape.position)
     )
-    console.log(maxVal)
+    console.log("getLastElementId", maxVal)
     return maxVal
   }
   console.log("Last element id", getLastElementId())
   function deleteLast() {
+    const lastId = getLastElementId()
     const newShapes = paint[initialNode].shapes.slice(0, -2)
     const newX = paint[initialNode].xValue - 200
+    console.log(lastId)
+    dispatch(disableButton(lastId))
     setPaint({
       ...paint,
       [initialNode]: {
@@ -127,14 +133,14 @@ function App() {
               {" "}
               <button
                 className='shapes-button'
-                disabled={false}
+                disabled={component.disabled}
                 onClick={() =>
                   addCustomRectangle(
                     component.color,
                     component.name,
                     component.position,
-                    component.requiredFor,
-                    component.disabled
+                    component.prerequisite,
+                    component.types
                   )
                 }
               >
@@ -144,7 +150,8 @@ function App() {
               </button>
             </div>
           )
-        }).splice(getLastElementId())}
+        })}
+        {/* }).splice(getLastElementId())} */}
       </div>
       <div className='shapes-drawings'>
         <Draw paint={paint} node={0} />

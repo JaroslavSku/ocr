@@ -7,9 +7,11 @@ import { Provider } from "react-redux"
 import { combineReducers, compose, applyMiddleware, createStore } from "redux"
 import menuReducer from "./store/reducers/menuReducer"
 import thunk from "redux-thunk"
+import componentReducer from "./store/reducers/componentReducer"
 
 const rootReducer = combineReducers({
   menu: menuReducer,
+  components: componentReducer,
 })
 const storeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
