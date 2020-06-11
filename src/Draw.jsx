@@ -1,25 +1,28 @@
-import React, { useState } from "react"
+import React from "react"
 import { useDispatch } from "react-redux"
-import { updatePosition } from "./store/actions/menuAction"
-import { isEmpty } from "lodash"
+import { updatePosition, openMenu, closeMenu } from "./store/actions/menuAction"
+
+import SideMenu from "./store/menu/SideMenu"
 
 export default function Draw({ paint, node }) {
-  const [leftPosition, setLeftPosition] = useState(10)
-  const [topPosition, setTopPosition] = useState(10)
   const dispatch = useDispatch()
-
-  function handleClick(x, y, width) {
-    console.log("clicked ", x)
-
+  function openBubbleMenu(x, y, width) {
     const leftPosition = x - width / 2
     const topPosition = y - width / 1.5
     dispatch(updatePosition(leftPosition, topPosition))
-    setLeftPosition(leftPosition)
-    setTopPosition(topPosition)
   }
-  let lastX = 0
+
+  function openNav(name, types) {
+    const navWidth = 200
+    dispatch(openMenu(name, navWidth, types))
+  }
+
+  function closeNav() {
+    dispatch(closeMenu())
+  }
   return (
     <div className='svg-container'>
+      <SideMenu closeNav={closeNav} />
       <svg width='100rem' height='80rem'>
         <defs>
           <marker
@@ -48,46 +51,13 @@ export default function Draw({ paint, node }) {
               />
             )
           }
-          if (shape.type === "rect" && !isEmpty(shape.types)) {
-            return (
-              <g>
-                <rect
-                  id='rect1'
-                  x={shape.x}
-                  y={shape.y - shape.width / 2}
-                  height={shape.height}
-                  width={shape.width}
-                  fill={shape.fill}
-                />
-                {}
-                <g>
-                  <line
-                    x1={shape.x}
-                    y1={shape.y}
-                    x2={shape.x + 150}
-                    y2={shape.y}
-                    stroke={shape.fill}
-                    marker-end='url(#arrow)'
-                  />
-                  <text
-                    x={shape.x + shape.width + 25}
-                    y={shape.y}
-                    font-size='10'
-                    dominant-baseline='middle'
-                    stroke='white'
-                    text-anchor='middle'
-                  >
-                    XML
-                  </text>
-                </g>
-              </g>
-            )
-          }
           if (shape.type === "rect") {
             return (
               <g>
                 <rect
-                  id='rect1'
+                  onClick={() => openNav(shape.name, shape.types)}
+                  // onDoubleClick={() => closeNav()}
+                  className='rectangle'
                   x={shape.x}
                   y={shape.y - shape.width / 2}
                   height={shape.height}
@@ -95,7 +65,7 @@ export default function Draw({ paint, node }) {
                   fill={shape.fill}
                 />
                 <text
-                  onClick={() => handleClick(shape.x, shape.y, shape.width)}
+                  onClick={() => openBubbleMenu(shape.x, shape.y, shape.width)}
                   className='svg-text'
                   x={shape.x + shape.width}
                   y={shape.y - shape.width / 2.6}
@@ -111,6 +81,8 @@ export default function Draw({ paint, node }) {
                   dominant-baseline='middle'
                   stroke='white'
                   text-anchor='middle'
+                  font-family='sans-serif'
+                  letter-spacing='1.5'
                 >
                   {shape.text}
                 </text>
@@ -118,25 +90,69 @@ export default function Draw({ paint, node }) {
             )
           }
           if (shape.type === "circle") {
+            const path = `M ${shape.x}, ${shape.y}
+            a 25,25 0 1,1 ${shape.width},0
+            a 25,25 0 1,1 -${shape.width},0`
+            console.log(path)
             return (
-              <rect
-                id='rect1'
-                x={shape.x}
-                y={shape.y - shape.width / 2}
-                height={shape.height}
-                width={shape.width}
-                fill={shape.fill}
-              />
+              <g>
+                <path className='rectangle' d={path} />
+                <text
+                  onClick={() => openBubbleMenu(shape.x, shape.y, shape.width)}
+                  className='svg-text'
+                  x={shape.x + shape.width / 1.9}
+                  y={shape.y - shape.width / 1.8}
+                  font-size='20'
+                  stroke='blue'
+                >
+                  +
+                </text>
+              </g>
+            )
+          }
+          if (shape.type === "IF") {
+            const xValueBase = shape.x + shape.width / 2
+            const xValueLeft = shape.x
+            const xValueRight = shape.x + shape.width
+            const polygonValues = `${xValueBase} 140, ${xValueRight} 200,${xValueBase} 260, ${xValueLeft} 200`
+            return (
+              <g>
+                <polygon
+                  className='rectangle'
+                  points={polygonValues}
+                  fill={shape.fill}
+                />
+                <text
+                  onClick={() => openBubbleMenu(shape.x, shape.y, shape.width)}
+                  className='svg-text'
+                  x={shape.x + shape.width / 1.9}
+                  y={shape.y - shape.width / 1.8}
+                  font-size='20'
+                  stroke='blue'
+                >
+                  +
+                </text>
+                <line
+                  x1={xValueBase}
+                  y1={shape.y}
+                  x2={xValueBase}
+                  y2={shape.y + shape.width}
+                  stroke={shape.fill}
+                  marker-end='url(#arrow)'
+                />
+                <rect
+                  id='rect1'
+                  x={shape.x}
+                  y={shape.y + shape.width + 10}
+                  height={shape.height}
+                  width={shape.width}
+                  fill={shape.fill}
+                />
+              </g>
             )
           }
         })}
       </svg>
-      {/* <div
-        className='svg-plus'
-        style={{ position: "fixed", top: shape.x, left: shape.y }}
-      >
-        +
-      </div> */}
     </div>
   )
 }

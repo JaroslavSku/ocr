@@ -16,3 +16,11 @@ export function disableButton(positionId) {
     })
   }
 }
+
+export function disableAll() {
+  return (dispatch) => {
+    dispatch({
+      type: "DISABLE_ALL",
+    })
+  }
+}

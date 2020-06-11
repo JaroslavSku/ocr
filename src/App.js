@@ -4,9 +4,14 @@ import "./App.css"
 import "./scsss/styles.scss"
 import Draw from "./Draw"
 import { map, find } from "lodash"
-import { rectAction, arrowLine } from "./shapes"
+import { generateShapes, arrowLine } from "./shapes"
 import { useSelector, useDispatch } from "react-redux"
-import { enableButton, disableButton } from "./store/actions/componentActions"
+import {
+  enableButton,
+  disableButton,
+  disableAll,
+} from "./store/actions/componentActions"
+import { closeMenu } from "./store/actions/menuAction"
 
 function App() {
   const [paint, setPaint] = useState([
@@ -18,7 +23,7 @@ function App() {
         {
           id: 1,
           position: 0,
-          type: "rect",
+          type: "circle",
           x: 50,
           y: 200,
           width: 100,
@@ -28,7 +33,7 @@ function App() {
       ],
     },
   ])
-  const { xPosition, yPosition } = useSelector((state) => state.menu)
+  const { xPosition, yPosition } = useSelector((state) => state.menu.bubbleMenu)
   const components = useSelector((state) => state.components)
   const dispatch = useDispatch()
   console.log("App.js", xPosition, yPosition)
@@ -44,7 +49,7 @@ function App() {
     const newShapes = [
       ...paint[initialNode].shapes,
       arrowLine(xValue, newX2, yValue, 1),
-      rectAction(1, newX2, yValue, "Parser"),
+      generateShapes(1, newX2, yValue, "Parser"),
     ]
     console.log(newShapes)
     console.log("This is the state paint", paint)
@@ -58,7 +63,14 @@ function App() {
     })
   }
 
-  async function addCustomRectangle(color, text, position, prerequisite) {
+  async function addCustomRectangle(
+    color,
+    text,
+    position,
+    prerequisite,
+    types,
+    type
+  ) {
     const { xValue, yValue } = paint[initialNode] //200
     const newX2 = xValue + 100 //300
     const newWithRectangle = newX2 + 100
@@ -70,15 +82,15 @@ function App() {
     )
     //prepocitani
     console.log("requirements", requirementFullfilled)
-    if (!requirementFullfilled) {
-      alert(`You need to add element${prerequisite}`)
+    if (text === "GenerateOutpu") {
+      dispatch(disableAll())
     } else {
       // set disabled to false redux
       await dispatch(enableButton(position))
       const newShapes = [
         ...paint[initialNode].shapes,
         arrowLine(xValue, newX2, yValue, position),
-        rectAction(position, newX2, yValue, text, color),
+        generateShapes(position, type, newX2, yValue, text, color, types),
       ]
       console.log(newShapes)
       console.log("This is the state paint", paint)
@@ -120,6 +132,9 @@ function App() {
       },
     })
   }
+  function closeNav() {
+    dispatch(closeMenu())
+  }
 
   return (
     <div onDoubleClick={deleteLast} className='App'>
@@ -140,13 +155,15 @@ function App() {
                     component.name,
                     component.position,
                     component.prerequisite,
-                    component.types
+                    component.types,
+                    component.type
                   )
                 }
               >
                 {/* {component.id} */}
-                <img src={require(`./assets/${component.name}.svg`)} />
+
                 <div className='shapes-tooltip'>{component.name}</div>
+                <img src={require(`./assets/${component.name}.svg`)} />
               </button>
             </div>
           )
