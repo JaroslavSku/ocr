@@ -4,7 +4,7 @@ import { updatePosition, openMenu, closeMenu } from "./store/actions/menuAction"
 
 import SideMenu from "./store/menu/SideMenu"
 
-export default function Draw({ paint, node }) {
+export default function Draw({ drawedObjects, node }) {
   const dispatch = useDispatch()
   function openBubbleMenu(x, y, width) {
     const leftPosition = x - width / 2
@@ -12,9 +12,10 @@ export default function Draw({ paint, node }) {
     dispatch(updatePosition(leftPosition, topPosition))
   }
 
-  function openNav(name, types) {
+  function openNav(name, types, id) {
     const navWidth = 200
-    dispatch(openMenu(name, navWidth, types))
+    console.log("open nav id", id)
+    dispatch(openMenu(name, navWidth, types, id))
   }
 
   function closeNav() {
@@ -37,8 +38,7 @@ export default function Draw({ paint, node }) {
             <path d='M0,0 L0,6 L9,3 z' fill='red' />
           </marker>
         </defs>
-        {paint[node].shapes.map((shape, id) => {
-          console.log("Loooping", id)
+        {drawedObjects[node].shapes.map((shape, id) => {
           if (shape.type === "line") {
             return (
               <line
@@ -55,7 +55,7 @@ export default function Draw({ paint, node }) {
             return (
               <g>
                 <rect
-                  onClick={() => openNav(shape.name, shape.types)}
+                  onClick={() => openNav(shape.name, shape.types, shape.id)}
                   // onDoubleClick={() => closeNav()}
                   className='rectangle'
                   x={shape.x}
@@ -93,7 +93,7 @@ export default function Draw({ paint, node }) {
             const path = `M ${shape.x}, ${shape.y}
             a 25,25 0 1,1 ${shape.width},0
             a 25,25 0 1,1 -${shape.width},0`
-            console.log(path)
+            const circleText = shape.name === "GenerateOutput" ? "End" : "Start"
             return (
               <g>
                 <path className='rectangle' d={path} />
@@ -107,6 +107,18 @@ export default function Draw({ paint, node }) {
                 >
                   +
                 </text>
+                <text
+                  x={shape.x + shape.width / 2}
+                  y={shape.y}
+                  font-size='12'
+                  dominant-baseline='middle'
+                  stroke='white'
+                  text-anchor='middle'
+                  font-family='sans-serif'
+                  letter-spacing='1.5'
+                >
+                  {circleText}
+                </text>
               </g>
             )
           }
@@ -115,6 +127,7 @@ export default function Draw({ paint, node }) {
             const xValueLeft = shape.x
             const xValueRight = shape.x + shape.width
             const polygonValues = `${xValueBase} 140, ${xValueRight} 200,${xValueBase} 260, ${xValueLeft} 200`
+
             return (
               <g>
                 <polygon
@@ -132,6 +145,18 @@ export default function Draw({ paint, node }) {
                 >
                   +
                 </text>
+                <text
+                  x={shape.x + shape.width / 2}
+                  y={shape.y}
+                  font-size='12'
+                  dominant-baseline='middle'
+                  stroke='white'
+                  text-anchor='middle'
+                  font-family='sans-serif'
+                  letter-spacing='1.5'
+                >
+                  Any error?
+                </text>
                 <line
                   x1={xValueBase}
                   y1={shape.y}
@@ -140,14 +165,28 @@ export default function Draw({ paint, node }) {
                   stroke={shape.fill}
                   marker-end='url(#arrow)'
                 />
-                <rect
-                  id='rect1'
-                  x={shape.x}
-                  y={shape.y + shape.width + 10}
-                  height={shape.height}
-                  width={shape.width}
-                  fill={shape.fill}
-                />
+                <g>
+                  <rect
+                    id='rect1'
+                    x={shape.x}
+                    y={shape.y + shape.width + 10}
+                    height={shape.height}
+                    width={shape.width}
+                    fill={shape.fill}
+                  />
+                  <text
+                    x={shape.x + shape.width / 2}
+                    y={shape.y + shape.width * 1.6}
+                    font-size='12'
+                    dominant-baseline='middle'
+                    stroke='white'
+                    text-anchor='middle'
+                    font-family='sans-serif'
+                    letter-spacing='1.5'
+                  >
+                    Error message
+                  </text>
+                </g>
               </g>
             )
           }

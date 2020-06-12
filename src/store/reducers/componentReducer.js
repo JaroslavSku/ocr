@@ -18,6 +18,7 @@ const initialState = [
     name: "ChooseParser",
     color: "darkgrey",
     types: ["XML", "XLS", "Text", "PDF"],
+    optionSelected: null,
     disabled: false,
   },
   {

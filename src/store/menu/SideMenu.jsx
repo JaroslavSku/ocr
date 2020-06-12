@@ -1,11 +1,20 @@
 import React from "react"
-import { useSelector } from "react-redux"
+import { useSelector, useDispatch } from "react-redux"
+import { updateObjectOptions } from "../actions/drawedObjectsActions"
 
 export default function SideMenu({ closeNav }) {
-  const { types, header, navWidth } = useSelector(
+  const { types, header, navWidth, id } = useSelector(
     (state) => state.menu.sideMenu
   )
-  console.log("option types", types)
+
+  const dispatch = useDispatch()
+
+  function saveOptionValue(e) {
+    const value = e.target.value
+    console.log("sidemenu", id, value)
+    // dispatch(updateObjectOptions(id, value))
+    console.log("sidemenu", id, value)
+  }
   return (
     <div style={{ width: navWidth }} id='mySidenav' className='sidenav'>
       <a className='closebtn' onClick={closeNav}>
@@ -16,7 +25,12 @@ export default function SideMenu({ closeNav }) {
       </div>
       <div className='sidenav-body'>
         <label for='types'>Vyberte vlastnosti</label>
-        <select id='types' name='carlist' form='carform'>
+        <select
+          onChange={(event) => saveOptionValue(event)}
+          id='types'
+          name='carlist'
+          form='carform'
+        >
           {types ? (
             types.map((type, id) => {
               return (

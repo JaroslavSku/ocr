@@ -24,3 +24,17 @@ export function disableAll() {
     })
   }
 }
+
+export function handleButtons(position, name) {
+  // if (name === "GenerateOutput") {
+  //   disableAll()
+  // }
+  console.log("Handle button", name)
+  return (dispatch) => {
+    if (name === "GenerateOutput") {
+      console.log("Disable all called")
+      disableAll()
+    }
+    dispatch(enableButton(position))
+  }
+}

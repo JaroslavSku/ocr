@@ -18,13 +18,15 @@ export function updatePosition(x, y) {
   }
 }
 
-export function openMenu(header, navWidth, types) {
+export function openMenu(header, navWidth, types, id) {
+  console.log("Opene side nav id", id)
   return (dispatch) => {
     dispatch({
       type: "OPEN_SIDENAV",
       header,
       types,
       navWidth,
+      id,
     })
   }
 }

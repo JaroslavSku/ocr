@@ -7,99 +7,49 @@ import { map, find } from "lodash"
 import { generateShapes, arrowLine } from "./shapes"
 import { useSelector, useDispatch } from "react-redux"
 import {
-  enableButton,
+  handleButtons,
   disableButton,
-  disableAll,
+  enableButton,
 } from "./store/actions/componentActions"
 import { closeMenu } from "./store/actions/menuAction"
+import { addObject } from "./store/actions/drawedObjectsActions"
 
 function App() {
-  const [paint, setPaint] = useState([
-    {
-      node: 0,
-      xValue: 110,
-      yValue: 200,
-      shapes: [
-        {
-          id: 1,
-          position: 0,
-          type: "circle",
-          x: 50,
-          y: 200,
-          width: 100,
-          height: 100,
-          fill: "black",
-        },
-      ],
-    },
-  ])
   const { xPosition, yPosition } = useSelector((state) => state.menu.bubbleMenu)
   const components = useSelector((state) => state.components)
+  const drawedObjects = useSelector((state) => state.draw)
   const dispatch = useDispatch()
   const initialNode = 0
-  const defaultLength = 0
+  const defaultWidth = 100
 
-  async function addCustomRectangle(
-    color,
-    text,
-    position,
-    prerequisite,
-    types,
-    type
-  ) {
-    const { xValue, yValue } = paint[initialNode] //200
+  function addCustomRectangle(color, name, position, types, type) {
+    const { xValue, yValue } = drawedObjects[initialNode] //200
     const newX2 = xValue + 100 //300
-    const newWithRectangle = newX2 + 100
-    const requirementFullfilled = find(
-      paint[initialNode].shapes,
-      (shape) => shape.position === prerequisite
-    )
-
-    if (text === "GenerateOutput") {
-      dispatch(disableAll())
-    } else {
-      // set disabled to false redux
-      await dispatch(enableButton(position))
-      const newShapes = [
-        ...paint[initialNode].shapes,
-        arrowLine(xValue, newX2, yValue, position),
-        generateShapes(position, type, newX2, yValue, text, color, types),
-      ]
-      setPaint({
-        ...paint,
-        [initialNode]: {
-          ...paint[initialNode],
-          xValue: newWithRectangle,
-          shapes: newShapes,
-        },
-      })
-    }
+    const lastId = getLastElementId()
+    console.log("added element", name, lastId)
+    dispatch(addObject(lastId, position, type, name, color, types))
+    dispatch(enableButton(position))
   }
-  // generate XML potrebuje parser, checknout jestli je na pozici pred chooseparser
-  // if id 3 and not 2 error - pred generate xml musi byt parser
-  //
+
   function getLastElementId() {
     const maxVal = Math.max(
-      ...paint[initialNode].shapes.map((shape) => shape.position)
+      ...drawedObjects[initialNode].shapes.map((shape) => {
+        if (shape.id) {
+          return shape.id
+        }
+        return 0
+      })
     )
-    console.log("getLastElementId", maxVal)
+    console.log("max element id", maxVal)
     return maxVal
   }
-  console.log("Last element id", getLastElementId())
+
   function deleteLast() {
     const lastId = getLastElementId()
-    const newShapes = paint[initialNode].shapes.slice(0, -2)
-    const newX = paint[initialNode].xValue - 200
+    const newShapes = drawedObjects[initialNode].shapes.slice(0, -2)
+    const newX = drawedObjects[initialNode].xValue - 200
     console.log(lastId)
     dispatch(disableButton(lastId))
-    setPaint({
-      ...paint,
-      [initialNode]: {
-        ...paint[initialNode],
-        xValue: newX,
-        shapes: newShapes,
-      },
-    })
   }
   function closeNav() {
     dispatch(closeMenu())
@@ -111,36 +61,28 @@ function App() {
         style={{ left: xPosition, top: yPosition }}
         className='shapes-bubble'
       >
-        {map(components, (component) => {
-          return (
-            <div>
-              {" "}
-              <button
-                className='shapes-button'
-                disabled={component.disabled}
-                onClick={() =>
-                  addCustomRectangle(
-                    component.color,
-                    component.name,
-                    component.position,
-                    component.prerequisite,
-                    component.types,
-                    component.type
-                  )
-                }
-              >
-                {/* {component.id} */}
-
-                <div className='shapes-tooltip'>{component.name}</div>
-                <img src={require(`./assets/${component.name}.svg`)} />
-              </button>
-            </div>
-          )
-        })}
-        {/* }).splice(getLastElementId())} */}
+        {map(
+          components,
+          ({ disabled, color, name, position, prerequisite, types, type }) => {
+            return (
+              <div>
+                <button
+                  className='shapes-button'
+                  disabled={disabled}
+                  onClick={() =>
+                    addCustomRectangle(color, name, position, types, type)
+                  }
+                >
+                  <div className='shapes-tooltip'>{name}</div>
+                  <img src={require(`./assets/${name}.svg`)} />
+                </button>
+              </div>
+            )
+          }
+        )}
       </div>
       <div className='shapes-drawings'>
-        <Draw paint={paint} node={0} />
+        <Draw drawedObjects={drawedObjects} node={0} />
       </div>
     </div>
   )

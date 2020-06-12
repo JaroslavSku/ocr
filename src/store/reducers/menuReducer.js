@@ -1,5 +1,3 @@
-import SideMenu from "../menu/SideMenu"
-
 const initialState = {
   bubbleMenu: { open: false, xPosition: -560, yPosition: -550 },
   sideMenu: {
@@ -7,11 +5,12 @@ const initialState = {
     navWidth: 0,
     header: null,
     types: [],
+    id: null,
   },
 }
 
 const menuReducer = (state = initialState, action) => {
-  const { x, y, navWidth, header, types } = action
+  const { x, y, navWidth, header, types, id } = action
   switch (action.type) {
     case "UPDATE_POSITION":
       return {
@@ -29,6 +28,7 @@ const menuReducer = (state = initialState, action) => {
           header,
           navWidth,
           types,
+          id,
         },
       }
     case "CLOSE_SIDENAV":

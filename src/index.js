@@ -8,10 +8,12 @@ import { combineReducers, compose, applyMiddleware, createStore } from "redux"
 import menuReducer from "./store/reducers/menuReducer"
 import thunk from "redux-thunk"
 import componentReducer from "./store/reducers/componentReducer"
+import drawedObjectsReducer from "./store/reducers/drawedObjectsReducers"
 
 const rootReducer = combineReducers({
   menu: menuReducer,
   components: componentReducer,
+  draw: drawedObjectsReducer,
 })
 const storeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
