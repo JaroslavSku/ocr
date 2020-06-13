@@ -8,11 +8,16 @@ function OrderFinishedModal() {
     dispatch(hide("orderFinishedModal"))
   }
   return (
-    <div>
-      <h2>Přejete si ukončit Vaši objednávku?</h2>
-      <button onClick={finisheOrder} type='submit'>
-        OK
-      </button>
+    <div className='modal'>
+      <div className='modal-body'>
+        <h2>Přejete si ukončit Vaši objednávku?</h2>
+        <button onClick={finisheOrder} type='submit'>
+          OK
+        </button>
+        <button onClick={finisheOrder} type='submit'>
+          CANCEL
+        </button>
+      </div>
     </div>
   )
 }

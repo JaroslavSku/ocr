@@ -33,7 +33,7 @@ export function handleButtons(position, name) {
   return (dispatch) => {
     if (name === "GenerateOutput") {
       console.log("Disable all called")
-      disableAll()
+      dispatch(disableAll())
     }
     dispatch(enableButton(position))
   }

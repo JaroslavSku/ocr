@@ -12,7 +12,12 @@ import {
   enableButton,
 } from "./store/actions/componentActions"
 import { closeMenu } from "./store/actions/menuAction"
-import { addObject } from "./store/actions/drawedObjectsActions"
+import {
+  addObject,
+  deleteLastObject,
+} from "./store/actions/drawedObjectsActions"
+import { show } from "redux-modal"
+import OrderFinishedModal from "./store/modals/OrderFinishedModal"
 
 function App() {
   const { xPosition, yPosition } = useSelector((state) => state.menu.bubbleMenu)
@@ -23,12 +28,18 @@ function App() {
   const defaultWidth = 100
 
   function addCustomRectangle(color, name, position, types, type) {
-    const { xValue, yValue } = drawedObjects[initialNode] //200
-    const newX2 = xValue + 100 //300
     const lastId = getLastElementId()
     console.log("added element", name, lastId)
     dispatch(addObject(lastId, position, type, name, color, types))
-    dispatch(enableButton(position))
+    dispatch(handleButtons(position, name))
+    checkIfFinished(name)
+  }
+  let clickTimeout = null
+  function checkIfFinished(name) {
+    if (name === "GenerateOutput") {
+      console.log("Order finished")
+      dispatch(show("orderFinishedModal"))
+    }
   }
 
   function getLastElementId() {
@@ -46,17 +57,34 @@ function App() {
 
   function deleteLast() {
     const lastId = getLastElementId()
-    const newShapes = drawedObjects[initialNode].shapes.slice(0, -2)
-    const newX = drawedObjects[initialNode].xValue - 200
-    console.log(lastId)
+    dispatch(deleteLastObject(lastId))
+    console.log("delete last called", lastId)
     dispatch(disableButton(lastId))
   }
   function closeNav() {
     dispatch(closeMenu())
   }
 
+  const handleClicks = () => {
+    if (clickTimeout !== null) {
+      console.log("double click executes")
+      //delete Item
+      clearTimeout(clickTimeout)
+      clickTimeout = null
+    } else {
+      console.log("single click")
+      clickTimeout = setTimeout(() => {
+        console.log("first click executes ")
+        // open menu
+        clearTimeout(clickTimeout)
+        clickTimeout = null
+      }, 2000)
+    }
+  }
+
   return (
-    <div onDoubleClick={deleteLast} className='App'>
+    <div onClick={handleClicks} className='App'>
+      <OrderFinishedModal />
       <div
         style={{ left: xPosition, top: yPosition }}
         className='shapes-bubble'

@@ -142,6 +142,14 @@ const componentReducer = (state = initialState, action) => {
         ...state,
         ...components,
       }
+    case "DISABLE_ALL":
+      forEach(components, (component) => {
+        component.disabled = true
+      })
+      return {
+        ...state,
+        ...components,
+      }
     default:
       return state
   }

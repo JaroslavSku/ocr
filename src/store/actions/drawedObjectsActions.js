@@ -27,3 +27,11 @@ export const updateObjectOptions = (id, value) => {
     })
   }
 }
+
+export const deleteLastObject = (id) => {
+  return (dispatch) => {
+    dispatch({
+      type: "DELETE_OBJECT",
+    })
+  }
+}

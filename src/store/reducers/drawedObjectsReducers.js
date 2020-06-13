@@ -99,6 +99,19 @@ const drawedObjectsReducer = (state = initialState, action) => {
         },
       }
 
+    case "DELETE_OBJECT":
+      newShapes = state[initialNode].shapes.slice(0, -2)
+      newXwithWidth = state[initialNode].xValue - 200
+
+      return {
+        ...state,
+        [initialNode]: {
+          ...state[initialNode],
+          xValue: newXwithWidth,
+          shapes: newShapes,
+        },
+      }
+
     default:
       return state
   }
