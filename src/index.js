@@ -2,6 +2,7 @@ import React from "react"
 import ReactDOM from "react-dom"
 import "./index.css"
 import App from "./App"
+import { reducer as modal } from "redux-modal"
 import * as serviceWorker from "./serviceWorker"
 import { Provider } from "react-redux"
 import { combineReducers, compose, applyMiddleware, createStore } from "redux"
@@ -14,6 +15,7 @@ const rootReducer = combineReducers({
   menu: menuReducer,
   components: componentReducer,
   draw: drawedObjectsReducer,
+  modal,
 })
 const storeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 

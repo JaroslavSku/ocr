@@ -1,7 +1,7 @@
 import React from "react"
 import { useDispatch } from "react-redux"
 import { updatePosition, openMenu, closeMenu } from "./store/actions/menuAction"
-
+import { map } from "lodash"
 import SideMenu from "./store/menu/SideMenu"
 
 export default function Draw({ drawedObjects, node }) {
@@ -38,7 +38,7 @@ export default function Draw({ drawedObjects, node }) {
             <path d='M0,0 L0,6 L9,3 z' fill='red' />
           </marker>
         </defs>
-        {drawedObjects[node].shapes.map((shape, id) => {
+        {map(drawedObjects[node].shapes, (shape, id) => {
           if (shape.type === "line") {
             return (
               <line

@@ -1,6 +1,6 @@
 import { bindActionCreators } from "redux"
 import { arrowLine, generateShapes } from "../../shapes"
-import { find } from "lodash"
+import { findKey, find, findIndex } from "lodash"
 
 const initialState = [
   {
@@ -9,7 +9,7 @@ const initialState = [
     yValue: 200,
     shapes: [
       {
-        id: 1,
+        id: 0,
         position: 0,
         type: "circle",
         x: 50,
@@ -32,13 +32,14 @@ const drawedObjectsReducer = (state = initialState, action) => {
     types,
     lastId,
     optionValue,
+    objectId,
   } = action
   const { xValue, yValue } = state[initialNode]
   const id = lastId + 1
   let newX2 = null
   let newXwithWidth = null
   let newShapes = []
-  let shape = null
+
   switch (action.type) {
     case "ADD_OBJECT":
       newX2 = xValue + 100
@@ -68,19 +69,33 @@ const drawedObjectsReducer = (state = initialState, action) => {
       }
 
     case "SAVE_OPTION":
-      shape = find(...state[initialNode].shapes, ["id", id])
+      // const key = find(Object.entries(state[initialNode].shapes), (shape) => {
+      //   console.log(shape)
+      //   return shape[1].id === objectId
+      // })[0]
+      // const newObject = {
+      //   ...state[initialNode].shapes[index],
+      //   optionValue,
+      // }
+      const index = findIndex(state[initialNode].shapes, ["id", objectId])
+      console.log(index, state[initialNode].shapes[index])
+      let newItems = [...state[initialNode].shapes]
+      newItems[index]["optionValue"] = optionValue
+      // const newObject = {
+      //   ...state[initialNode].shapes[index],
+      //   optionValue
+      // }
 
+      // const newShapes =[
+      //   ...state[initialNode].shapes,
+      // ]
+
+      console.log("This is the key", index, newItems)
       return {
         ...state,
         [initialNode]: {
           ...state[initialNode],
-          shapes: {
-            ...state[initialNode].shapes,
-            [id]: {
-              ...state[initialNode].shapes[id],
-              optionValue,
-            },
-          },
+          shapes: newItems,
         },
       }
 
