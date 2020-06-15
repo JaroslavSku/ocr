@@ -1,6 +1,14 @@
 import { findIndex } from "lodash"
 
-export const addObject = (lastId, position, objectType, name, color, types) => {
+export const addObject = (
+  lastId,
+  position,
+  objectType,
+  name,
+  color,
+  types,
+  optionValue
+) => {
   console.log("some data", lastId, position, objectType, name, color)
   return (dispatch) => {
     dispatch({
@@ -11,6 +19,7 @@ export const addObject = (lastId, position, objectType, name, color, types) => {
       name,
       color,
       types,
+      optionValue,
     })
   }
 }

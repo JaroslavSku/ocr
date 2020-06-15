@@ -56,7 +56,8 @@ const drawedObjectsReducer = (state = initialState, action) => {
           color,
           name,
           types,
-          id
+          id,
+          optionValue
         ),
       ]
       return {

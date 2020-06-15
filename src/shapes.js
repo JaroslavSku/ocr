@@ -19,7 +19,8 @@ export const generateShapes = (
   fill,
   name,
   types,
-  id
+  id,
+  optionValue
 ) => {
   return {
     position,
@@ -33,5 +34,6 @@ export const generateShapes = (
     name,
     types,
     id,
+    optionValue,
   }
 }

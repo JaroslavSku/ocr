@@ -4,6 +4,10 @@ import { updateObjectOptions } from "../actions/drawedObjectsActions"
 import { filter, find } from "lodash"
 
 export default function SideMenu({ closeNav }) {
+  const [selectValue, setSelectValue] = useState(null)
+
+  const dispatch = useDispatch()
+
   const { types, header, navWidth, id } = useSelector(
     (state) => state.menu.sideMenu
   )
@@ -11,17 +15,15 @@ export default function SideMenu({ closeNav }) {
   const selectedShape = useSelector((state) =>
     find(state.draw[0].shapes, (shape) => shape.id === id)
   )
-  console.log("This is the defaultValue of the side menu", selectedShape)
+
   useEffect(() => {
     if (selectedShape) {
       const { optionValue } = selectedShape
+      console.log("selected value updated", optionValue)
       setSelectValue(optionValue)
     }
+    console.log("selected value updated II")
   }, [selectedShape])
-
-  const [selectValue, setSelectValue] = useState(null)
-
-  const dispatch = useDispatch()
 
   function saveOptionValue(e) {
     const value = e.target.value

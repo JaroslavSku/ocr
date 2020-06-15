@@ -26,9 +26,6 @@ export function disableAll() {
 }
 
 export function handleButtons(position, name) {
-  // if (name === "GenerateOutput") {
-  //   disableAll()
-  // }
   console.log("Handle button", name)
   return (dispatch) => {
     if (name === "GenerateOutput") {

@@ -1,40 +1,32 @@
-import React, { useState } from "react"
-import logo from "./logo.svg"
+import React from "react"
 import "./App.css"
 import "./scsss/styles.scss"
 import Draw from "./Draw"
-import { map, find } from "lodash"
-import { generateShapes, arrowLine } from "./shapes"
+import { map } from "lodash"
 import { useSelector, useDispatch } from "react-redux"
-import {
-  handleButtons,
-  disableButton,
-  enableButton,
-} from "./store/actions/componentActions"
+import { handleButtons } from "./store/actions/componentActions"
 import { closeMenu } from "./store/actions/menuAction"
-import {
-  addObject,
-  deleteLastObject,
-} from "./store/actions/drawedObjectsActions"
+import { addObject } from "./store/actions/drawedObjectsActions"
 import { show } from "redux-modal"
 import OrderFinishedModal from "./store/modals/OrderFinishedModal"
+import getLastElementId from "./store/helpers/getLastId"
 
 function App() {
   const { xPosition, yPosition } = useSelector((state) => state.menu.bubbleMenu)
   const components = useSelector((state) => state.components)
   const drawedObjects = useSelector((state) => state.draw)
   const dispatch = useDispatch()
-  const initialNode = 0
-  const defaultWidth = 100
+  let clickTimeout = null
 
-  function addCustomRectangle(color, name, position, types, type) {
-    const lastId = getLastElementId()
-    console.log("added element", name, lastId)
-    dispatch(addObject(lastId, position, type, name, color, types))
+  function addCustomRectangle(color, name, position, types, type, optionValue) {
+    const lastId = getLastElementId(drawedObjects)
+    console.log("added element", name, lastId, optionValue)
+    dispatch(addObject(lastId, position, type, name, color, types, optionValue))
     dispatch(handleButtons(position, name))
     checkIfFinished(name)
+    dispatch(closeMenu())
   }
-  let clickTimeout = null
+
   function checkIfFinished(name) {
     if (name === "GenerateOutput") {
       console.log("Order finished")
@@ -42,25 +34,6 @@ function App() {
     }
   }
 
-  function getLastElementId() {
-    const maxVal = Math.max(
-      ...drawedObjects[initialNode].shapes.map((shape) => {
-        if (shape.id) {
-          return shape.id
-        }
-        return 0
-      })
-    )
-    console.log("max element id", maxVal)
-    return maxVal
-  }
-
-  function deleteLast() {
-    const lastId = getLastElementId()
-    dispatch(deleteLastObject(lastId))
-    console.log("delete last called", lastId)
-    dispatch(disableButton(lastId))
-  }
   function closeNav() {
     dispatch(closeMenu())
   }
@@ -83,7 +56,7 @@ function App() {
   }
 
   return (
-    <div onClick={handleClicks} className='App'>
+    <div className='App'>
       <OrderFinishedModal />
       <div
         style={{ left: xPosition, top: yPosition }}
@@ -91,14 +64,21 @@ function App() {
       >
         {map(
           components,
-          ({ disabled, color, name, position, prerequisite, types, type }) => {
+          ({ disabled, color, name, position, types, type, optionValue }) => {
             return (
               <div>
                 <button
                   className='shapes-button'
                   disabled={disabled}
                   onClick={() =>
-                    addCustomRectangle(color, name, position, types, type)
+                    addCustomRectangle(
+                      color,
+                      name,
+                      position,
+                      types,
+                      type,
+                      optionValue
+                    )
                   }
                 >
                   <div className='shapes-tooltip'>{name}</div>

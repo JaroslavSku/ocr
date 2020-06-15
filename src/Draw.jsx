@@ -3,9 +3,15 @@ import { useDispatch } from "react-redux"
 import { updatePosition, openMenu, closeMenu } from "./store/actions/menuAction"
 import { map } from "lodash"
 import SideMenu from "./store/menu/SideMenu"
+import getLastElementId from "./store/helpers/getLastId"
+import { deleteLastObject } from "./store/actions/drawedObjectsActions"
+import { disableButton } from "./store/actions/componentActions"
 
 export default function Draw({ drawedObjects, node }) {
   const dispatch = useDispatch()
+  const lastId = getLastElementId(drawedObjects)
+  let clickTimeout = null
+
   function openBubbleMenu(x, y, width) {
     const leftPosition = x - width / 2
     const topPosition = y - width / 1.5
@@ -20,6 +26,49 @@ export default function Draw({ drawedObjects, node }) {
 
   function closeNav() {
     dispatch(closeMenu())
+  }
+
+  // const handleClicks = () => {
+  //   if (clickTimeout !== null) {
+  //     console.log("double click executes")
+  //     // deleteLast()
+  //     clearTimeout(clickTimeout)
+  //     dispatch(updatePosition(-500, -500))
+  //     clickTimeout = null
+  //   } else {
+  //     console.log("single click")
+  //     clickTimeout = setTimeout(() => {
+  //       console.log("first click executes ")
+  //       // open menu
+  //       clearTimeout(clickTimeout)
+  //       clickTimeout = null
+  //     }, 2000)
+  //   }
+  // }
+
+  function deleteLast() {
+    const lastId = getLastElementId(drawedObjects)
+    dispatch(deleteLastObject(lastId))
+    console.log("delete last called", lastId)
+    dispatch(disableButton(lastId))
+  }
+
+  function plusSign(shape) {
+    if (lastId === shape.id) {
+      return (
+        <text
+          //if shape id === lastid then display
+          onClick={() => openBubbleMenu(shape.x, shape.y, shape.width)}
+          className='svg-text'
+          x={shape.x + shape.width}
+          y={shape.y - shape.width / 2.6}
+          font-size='20'
+          stroke='blue'
+        >
+          +
+        </text>
+      )
+    }
   }
   return (
     <div className='svg-container'>
@@ -64,16 +113,7 @@ export default function Draw({ drawedObjects, node }) {
                   width={shape.width}
                   fill={shape.fill}
                 />
-                <text
-                  onClick={() => openBubbleMenu(shape.x, shape.y, shape.width)}
-                  className='svg-text'
-                  x={shape.x + shape.width}
-                  y={shape.y - shape.width / 2.6}
-                  font-size='20'
-                  stroke='blue'
-                >
-                  +
-                </text>
+                {plusSign(shape)}
                 <text
                   x={shape.x + shape.width / 2}
                   y={shape.y}
