@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import { updateObjectOptions } from "../actions/drawedObjectsActions"
-import { filter, find } from "lodash"
+import { find } from "lodash"
 
 export default function SideMenu({ closeNav }) {
   const [selectValue, setSelectValue] = useState(null)
@@ -19,18 +19,13 @@ export default function SideMenu({ closeNav }) {
   useEffect(() => {
     if (selectedShape) {
       const { optionValue } = selectedShape
-      console.log("selected value updated", optionValue)
       setSelectValue(optionValue)
     }
-    console.log("selected value updated II")
   }, [selectedShape])
 
-  function saveOptionValue(e) {
-    const value = e.target.value
-    console.log("sidemenu", id, value)
+  function saveOptionValue({ target: { value } }) {
     dispatch(updateObjectOptions(id, value))
     setSelectValue(value)
-    console.log("sidemenu", id, value)
   }
   return (
     <div style={{ width: navWidth }} id='mySidenav' className='sidenav'>
@@ -43,7 +38,7 @@ export default function SideMenu({ closeNav }) {
       <div className='sidenav-body'>
         <label for='types'>Vyberte vlastnosti</label>
         <select
-          onChange={(event) => saveOptionValue(event)}
+          onChange={saveOptionValue}
           value={selectValue}
           id='types'
           name='carlist'

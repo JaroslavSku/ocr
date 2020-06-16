@@ -1,4 +1,4 @@
-import { findIndex } from "lodash"
+import { updatePosition } from "./menuAction"
 
 export const addObject = (
   lastId,
@@ -37,10 +37,13 @@ export const updateObjectOptions = (id, value) => {
   }
 }
 
-export const deleteLastObject = (id) => {
+export const deleteLastObject = (lastId) => {
   return (dispatch) => {
-    dispatch({
-      type: "DELETE_OBJECT",
-    })
+    if (lastId > 1) {
+      dispatch(updatePosition(-500, -500))
+      dispatch({
+        type: "DELETE_OBJECT",
+      })
+    }
   }
 }

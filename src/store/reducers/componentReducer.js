@@ -1,9 +1,18 @@
-import { act } from "react-dom/test-utils"
-import { forEach } from "lodash"
+import { forEach, find } from "lodash"
+
 const initialState = [
   {
     id: 1,
     position: 1,
+    prerequisite: 0,
+    type: "circle",
+    name: "Start",
+    color: "darkgrey",
+    disabled: false,
+  },
+  {
+    id: 2,
+    position: 2,
     prerequisite: 0,
     type: "rect",
     name: "Unzip",
@@ -11,8 +20,8 @@ const initialState = [
     disabled: false,
   },
   {
-    id: 2,
-    position: 2,
+    id: 3,
+    position: 3,
     prerequisite: 0,
     type: "rect",
     name: "ChooseParser",
@@ -22,20 +31,11 @@ const initialState = [
     disabled: false,
   },
   {
-    id: 3,
-    position: 3,
-    prerequisite: 2,
-    type: "rect",
-    name: "GenerateXML",
-    color: "darkgrey",
-    disabled: true,
-  },
-  {
     id: 4,
     position: 4,
     prerequisite: 3,
     type: "rect",
-    name: "DetectFileTypes",
+    name: "GenerateXML",
     color: "darkgrey",
     disabled: true,
   },
@@ -44,16 +44,16 @@ const initialState = [
     position: 5,
     prerequisite: 4,
     type: "rect",
-    name: "SplitXMLs",
+    name: "DetectFileTypes",
     color: "darkgrey",
     disabled: true,
   },
   {
     id: 6,
     position: 6,
-    prerequisite: 4,
+    prerequisite: 5,
     type: "rect",
-    name: "MineData",
+    name: "SplitXMLs",
     color: "darkgrey",
     disabled: true,
   },
@@ -62,16 +62,16 @@ const initialState = [
     position: 7,
     prerequisite: 5,
     type: "rect",
-    name: "MergeMinedData",
+    name: "MineData",
     color: "darkgrey",
     disabled: true,
   },
   {
     id: 8,
     position: 8,
-    prerequisite: 6,
+    prerequisite: 7,
     type: "rect",
-    name: "AddMetadata",
+    name: "MergeMinedData",
     color: "darkgrey",
     disabled: true,
   },
@@ -80,22 +80,31 @@ const initialState = [
     position: 9,
     prerequisite: 8,
     type: "rect",
-    name: "Validations",
-    color: "shadow",
+    name: "AddMetadata",
+    color: "darkgrey",
     disabled: true,
   },
   {
     id: 10,
     position: 10,
-    prerequisite: 6,
+    prerequisite: 9,
     type: "rect",
-    name: "ModifyData",
+    name: "Validations",
     color: "darkgrey",
     disabled: true,
   },
   {
     id: 11,
     position: 11,
+    prerequisite: 8,
+    type: "rect",
+    name: "ModifyData",
+    color: "darkgrey",
+    disabled: true,
+  },
+  {
+    id: 12,
+    position: 12,
     prerequisite: 0,
     type: "circle",
     name: "GenerateOutput",
@@ -103,8 +112,8 @@ const initialState = [
     disabled: false,
   },
   {
-    id: 12,
-    position: 0,
+    id: 13,
+    position: 13,
     name: "IF",
     type: "IF",
     prerequisite: 0,
@@ -114,28 +123,42 @@ const initialState = [
 ]
 
 const componentReducer = (state = initialState, action) => {
-  const { id } = action
+  const { name } = action
   const components = state
+
   switch (action.type) {
     case "ENABLE_BUTTON":
-      console.log("These are the components", components, id)
-      //   Object.values(components).forEach((component) => {
-      //     console.log(component)
-      //   })
+      const componentEnableID = find(
+        components,
+        (component) => component.name === name
+      )
       forEach(components, (component) => {
-        if (component.prerequisite === id) {
+        if (
+          component.prerequisite <= componentEnableID.id &&
+          component.id >= componentEnableID.id
+        ) {
           component.disabled = false
+        } else if (component.id < componentEnableID.id) {
+          component.disabled = true
         }
       })
-      console.log("These are the components", components)
       return {
         ...state,
         ...components,
       }
     case "DISABLE_BUTTON":
+      const componentDisableId = find(
+        components,
+        (component) => component.name === name
+      )
       forEach(components, (component) => {
-        if (component.prerequisite >= id) {
+        if (component.prerequisite >= componentDisableId.id) {
           component.disabled = true
+        } else if (
+          component.id >= componentDisableId.id &&
+          component.prerequisite <= componentDisableId.id
+        ) {
+          component.disabled = false
         }
       })
       return {

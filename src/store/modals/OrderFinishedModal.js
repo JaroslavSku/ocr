@@ -10,7 +10,7 @@ function OrderFinishedModal() {
   return (
     <div className='modal'>
       <div className='modal-body'>
-        <h2>Přejete si ukončit Vaši objednávku?</h2>
+        <h2>Přejete si odeslat data?</h2>
         <button onClick={finisheOrder} type='submit'>
           OK
         </button>

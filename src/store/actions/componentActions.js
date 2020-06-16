@@ -1,18 +1,21 @@
-export function enableButton(positionId) {
+import { updatePosition } from "./menuAction"
+
+export function enableButton(positionId, name) {
   return (dispatch) => {
     dispatch({
       type: "ENABLE_BUTTON",
       id: positionId,
+      name,
     })
   }
 }
 
-export function disableButton(positionId) {
-  console.log("Action last id", positionId)
+export function disableButton(positionId, name) {
   return (dispatch) => {
     dispatch({
       type: "DISABLE_BUTTON",
       id: positionId,
+      name,
     })
   }
 }
@@ -26,12 +29,13 @@ export function disableAll() {
 }
 
 export function handleButtons(position, name) {
-  console.log("Handle button", name)
   return (dispatch) => {
     if (name === "GenerateOutput") {
-      console.log("Disable all called")
+      dispatch(updatePosition(-500, -500))
       dispatch(disableAll())
     }
-    dispatch(enableButton(position))
+    if (name !== "IF" && name !== "GenerateOutput") {
+      dispatch(enableButton(position, name))
+    }
   }
 }

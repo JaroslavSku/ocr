@@ -9,14 +9,15 @@ const initialState = [
     yValue: 200,
     shapes: [
       {
-        id: 0,
-        position: 0,
+        id: 1,
+        position: 1,
         type: "circle",
         x: 50,
         y: 200,
         width: 100,
         height: 100,
         fill: "black",
+        name: "Start",
       },
     ],
   },
@@ -70,14 +71,6 @@ const drawedObjectsReducer = (state = initialState, action) => {
       }
 
     case "SAVE_OPTION":
-      // const key = find(Object.entries(state[initialNode].shapes), (shape) => {
-      //   console.log(shape)
-      //   return shape[1].id === objectId
-      // })[0]
-      // const newObject = {
-      //   ...state[initialNode].shapes[index],
-      //   optionValue,
-      // }
       const index = findIndex(state[initialNode].shapes, ["id", objectId])
       console.log(index, state[initialNode].shapes[index])
       let newItems = [...state[initialNode].shapes]

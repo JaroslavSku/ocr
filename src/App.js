@@ -16,11 +16,9 @@ function App() {
   const components = useSelector((state) => state.components)
   const drawedObjects = useSelector((state) => state.draw)
   const dispatch = useDispatch()
-  let clickTimeout = null
 
   function addCustomRectangle(color, name, position, types, type, optionValue) {
     const lastId = getLastElementId(drawedObjects)
-    console.log("added element", name, lastId, optionValue)
     dispatch(addObject(lastId, position, type, name, color, types, optionValue))
     dispatch(handleButtons(position, name))
     checkIfFinished(name)
@@ -29,34 +27,12 @@ function App() {
 
   function checkIfFinished(name) {
     if (name === "GenerateOutput") {
-      console.log("Order finished")
       dispatch(show("orderFinishedModal"))
     }
   }
 
-  function closeNav() {
-    dispatch(closeMenu())
-  }
-
-  const handleClicks = () => {
-    if (clickTimeout !== null) {
-      console.log("double click executes")
-      //delete Item
-      clearTimeout(clickTimeout)
-      clickTimeout = null
-    } else {
-      console.log("single click")
-      clickTimeout = setTimeout(() => {
-        console.log("first click executes ")
-        // open menu
-        clearTimeout(clickTimeout)
-        clickTimeout = null
-      }, 2000)
-    }
-  }
-
   return (
-    <div className='App'>
+    <div style={{ width: drawedObjects[0].xValue + 200 }} className='App'>
       <OrderFinishedModal />
       <div
         style={{ left: xPosition, top: yPosition }}
@@ -66,25 +42,27 @@ function App() {
           components,
           ({ disabled, color, name, position, types, type, optionValue }) => {
             return (
-              <div>
-                <button
-                  className='shapes-button'
-                  disabled={disabled}
-                  onClick={() =>
-                    addCustomRectangle(
-                      color,
-                      name,
-                      position,
-                      types,
-                      type,
-                      optionValue
-                    )
-                  }
-                >
-                  <div className='shapes-tooltip'>{name}</div>
-                  <img src={require(`./assets/${name}.svg`)} />
-                </button>
-              </div>
+              position > 1 && (
+                <div>
+                  <button
+                    className='shapes-button'
+                    disabled={disabled}
+                    onClick={() =>
+                      addCustomRectangle(
+                        color,
+                        name,
+                        position,
+                        types,
+                        type,
+                        optionValue
+                      )
+                    }
+                  >
+                    <div className='shapes-tooltip'>{name}</div>
+                    <img src={require(`./assets/${name}.svg`)} />
+                  </button>
+                </div>
+              )
             )
           }
         )}

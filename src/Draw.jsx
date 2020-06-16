@@ -1,7 +1,7 @@
 import React from "react"
-import { useDispatch } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import { updatePosition, openMenu, closeMenu } from "./store/actions/menuAction"
-import { map } from "lodash"
+import { map, find, last } from "lodash"
 import SideMenu from "./store/menu/SideMenu"
 import getLastElementId from "./store/helpers/getLastId"
 import { deleteLastObject } from "./store/actions/drawedObjectsActions"
@@ -10,8 +10,16 @@ import { disableButton } from "./store/actions/componentActions"
 export default function Draw({ drawedObjects, node }) {
   const dispatch = useDispatch()
   const lastId = getLastElementId(drawedObjects)
+  const beforeLastId = (lastId) => {
+    if (lastId > 1) {
+      return lastId - 1
+    }
+    return lastId
+  }
   let clickTimeout = null
-
+  const { name } = useSelector((state) =>
+    find(state.draw[0].shapes, (shape) => shape.id === beforeLastId(lastId))
+  )
   function openBubbleMenu(x, y, width) {
     const leftPosition = x - width / 2
     const topPosition = y - width / 1.5
@@ -28,29 +36,31 @@ export default function Draw({ drawedObjects, node }) {
     dispatch(closeMenu())
   }
 
-  // const handleClicks = () => {
-  //   if (clickTimeout !== null) {
-  //     console.log("double click executes")
-  //     // deleteLast()
-  //     clearTimeout(clickTimeout)
-  //     dispatch(updatePosition(-500, -500))
-  //     clickTimeout = null
-  //   } else {
-  //     console.log("single click")
-  //     clickTimeout = setTimeout(() => {
-  //       console.log("first click executes ")
-  //       // open menu
-  //       clearTimeout(clickTimeout)
-  //       clickTimeout = null
-  //     }, 2000)
-  //   }
-  // }
+  const handleClicks = () => {
+    if (clickTimeout !== null) {
+      console.log("double click executes")
+      deleteLast()
+      clearTimeout(clickTimeout)
+      // dispatch(updatePosition(-500, -500))
+      closeNav()
+      clickTimeout = null
+    } else {
+      console.log("single click")
+      clickTimeout = setTimeout(() => {
+        console.log("first click executes ")
+        // open menu
+        clearTimeout(clickTimeout)
+        clickTimeout = null
+      }, 1000)
+    }
+  }
 
   function deleteLast() {
-    const lastId = getLastElementId(drawedObjects)
-    dispatch(deleteLastObject(lastId))
-    console.log("delete last called", lastId)
-    dispatch(disableButton(lastId))
+    if (lastId > 0) {
+      dispatch(deleteLastObject(lastId))
+      console.log("delete last called", lastId)
+      dispatch(disableButton(lastId, name))
+    }
   }
 
   function plusSign(shape) {
@@ -71,9 +81,14 @@ export default function Draw({ drawedObjects, node }) {
     }
   }
   return (
-    <div className='svg-container'>
+    <div>
       <SideMenu closeNav={closeNav} />
-      <svg width='100rem' height='80rem'>
+      <svg
+        className='svg-container'
+        onClick={handleClicks}
+        width={drawedObjects[0].xValue + 200}
+        height='80rem'
+      >
         <defs>
           <marker
             id='arrow'
