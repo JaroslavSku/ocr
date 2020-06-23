@@ -1,10 +1,11 @@
-import { bindActionCreators } from "redux"
 import { arrowLine, generateShapes } from "../../shapes"
-import { findKey, find, findIndex } from "lodash"
+import { findIndex } from "lodash"
+import getLastElementId from "../helpers/getLastId"
 
 const initialState = [
   {
     node: 0,
+    formDataLoaded: false,
     xValue: 110,
     yValue: 200,
     shapes: [
@@ -25,24 +26,23 @@ const initialState = [
 
 const drawedObjectsReducer = (state = initialState, action) => {
   const initialNode = 0
-  const {
-    position,
-    objectType,
-    name,
-    color,
-    types,
-    lastId,
-    optionValue,
-    objectId,
-  } = action
   const { xValue, yValue } = state[initialNode]
-  const id = lastId + 1
+  const id = getLastElementId(state) + 1
   let newX2 = null
   let newXwithWidth = null
   let newShapes = []
-
+  localStorage.setItem("drawedObjects", JSON.stringify(state))
   switch (action.type) {
     case "ADD_OBJECT":
+      const {
+        position,
+        objectType,
+        name,
+        color,
+        types,
+        formData,
+        formValues,
+      } = action
       newX2 = xValue + 100
       newXwithWidth = newX2 + 100
       newShapes = [
@@ -58,7 +58,8 @@ const drawedObjectsReducer = (state = initialState, action) => {
           name,
           types,
           id,
-          optionValue
+          formData,
+          formValues
         ),
       ]
       return {
@@ -71,26 +72,15 @@ const drawedObjectsReducer = (state = initialState, action) => {
       }
 
     case "SAVE_OPTION":
+      const { objectId, inputName, optionValue } = action
       const index = findIndex(state[initialNode].shapes, ["id", objectId])
-      console.log(index, state[initialNode].shapes[index])
-      let newItems = [...state[initialNode].shapes]
-      newItems[index]["optionValue"] = optionValue
-      // const newObject = {
-      //   ...state[initialNode].shapes[index],
-      //   optionValue
-      // }
-
-      // const newShapes =[
-      //   ...state[initialNode].shapes,
-      // ]
-
-      console.log("This is the key", index, newItems)
+      let newState = state
+      newState[initialNode].shapes[index]["formValues"][inputName] = optionValue
+      // newState[initialNode]["new"] = "bla"
+      console.log(newState)
       return {
         ...state,
-        [initialNode]: {
-          ...state[initialNode],
-          shapes: newItems,
-        },
+        ...newState,
       }
 
     case "DELETE_OBJECT":

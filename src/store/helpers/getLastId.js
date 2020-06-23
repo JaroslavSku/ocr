@@ -7,7 +7,6 @@ function getLastElementId(drawedObjects) {
       return 0
     })
   )
-  console.log("max element id", maxVal)
   return maxVal
 }
 export default getLastElementId

@@ -7,6 +7,7 @@ const initialState = {
     types: [],
     id: null,
   },
+  formDataLoaded: false,
 }
 
 const menuReducer = (state = initialState, action) => {
@@ -38,6 +39,12 @@ const menuReducer = (state = initialState, action) => {
           open: false,
           navWidth: 0,
         },
+      }
+
+    case "FORMDATA_LOADED":
+      return {
+        ...state,
+        formDataLoaded: true,
       }
 
     default:

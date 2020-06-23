@@ -7,9 +7,11 @@ export const addObject = (
   name,
   color,
   types,
-  optionValue
+  optionValue,
+  formData,
+  formDefaultValues
 ) => {
-  console.log("some data", lastId, position, objectType, name, color)
+  console.log("these are form default values", formDefaultValues)
   return (dispatch) => {
     dispatch({
       type: "ADD_OBJECT",
@@ -20,12 +22,13 @@ export const addObject = (
       color,
       types,
       optionValue,
+      formData,
+      formValues: formDefaultValues,
     })
   }
 }
 
-export const updateObjectOptions = (id, value) => {
-  console.log("update obj data", id, value)
+export const updateObjectOptions = (id, value, inputName) => {
   const optionValue = value
   const objectId = id
   return (dispatch) => {
@@ -33,6 +36,7 @@ export const updateObjectOptions = (id, value) => {
       type: "SAVE_OPTION",
       optionValue,
       objectId,
+      inputName,
     })
   }
 }

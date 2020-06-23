@@ -5,13 +5,8 @@
     position: relative;
     top: 0;
     left: 0;
-    // position: absolute;
-    // flex-direction: column;
     z-index: 10;
     width: 15rem;
-    // height: 6rem;
-    // height: 30rem;
-
     background-color: darkgray;
     font-size: 1rem;
     border-radius: 2px;
@@ -50,28 +45,25 @@
       background-color: white;
     }
   }
-  &-drawings {
-    // position: relative;
-  }
+
   &-tooltip {
     position: absolute;
     visibility: hidden;
     left: 0;
     top: 0;
     border-radius: 5px;
-    z-index: 2;
-    // display: none;
+    z-index: 1200;
     font-size: 0.6rem;
     padding: 0.2rem;
     background-color: white;
   }
   &-button:hover &-tooltip {
     visibility: visible;
-    // display: block;
     color: black;
+    z-index: 1200;
   }
   &-button:focus {
-    visibility: hidden;
+    outline: 0;
   }
 }
 .svg {
@@ -80,30 +72,17 @@
     font-size: 1rem;
     font-weight: bolder;
     color: rebeccapurple;
-
-    // transform: translate(100%, 100%);
   }
 }
 
 .svg-plus {
   display: none;
 }
-
-// #rect1:hover + body.svg-plus {
-//   display: fixed;
-// }
-// #rect1:hover + text {
-//   display: none;
-// }
-
 .svg-text {
   opacity: 0.01;
   transition: opacity 0.5s ease-in-out;
 }
 
-// .rectangle + .svg-text {
-//   opacity: 1;
-// }
 .rectangle:hover + .svg-text {
   opacity: 1;
 }
@@ -112,9 +91,6 @@
 }
 .App {
   background-color: silver;
-  /* display: flex; */
-  /* width: 50rem; */
-  // width: 100rem;
   width: 100vw;
 }
 
@@ -125,7 +101,6 @@ body {
 .svg-container {
   background-color: silver;
   height: 100vh;
-  // width: 100%;
 }
 
 .rhombus {

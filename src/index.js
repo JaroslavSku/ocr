@@ -1,15 +1,16 @@
-import React from "react"
+import React, { useEffect } from "react"
 import ReactDOM from "react-dom"
 import "./index.css"
 import App from "./App"
 import { reducer as modal } from "redux-modal"
 import * as serviceWorker from "./serviceWorker"
-import { Provider } from "react-redux"
+import { Provider, useDispatch } from "react-redux"
 import { combineReducers, compose, applyMiddleware, createStore } from "redux"
 import menuReducer from "./store/reducers/menuReducer"
 import thunk from "redux-thunk"
 import componentReducer from "./store/reducers/componentReducer"
 import drawedObjectsReducer from "./store/reducers/drawedObjectsReducers"
+import { acceptJSON } from "./store/actions/apiJSON"
 
 const rootReducer = combineReducers({
   menu: menuReducer,
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   draw: drawedObjectsReducer,
   modal,
 })
+
 const storeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
 
 const store = createStore(rootReducer, storeEnhancers(applyMiddleware(thunk)))

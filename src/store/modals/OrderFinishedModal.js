@@ -1,11 +1,13 @@
 import React from "react"
 import { connectModal, hide } from "redux-modal"
 import { useDispatch } from "react-redux"
+import { sendJSON } from "../actions/apiJSON"
 
 function OrderFinishedModal() {
   const dispatch = useDispatch()
   function finisheOrder() {
     dispatch(hide("orderFinishedModal"))
+    dispatch(sendJSON())
   }
   return (
     <div className='modal'>

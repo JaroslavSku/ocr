@@ -28,7 +28,6 @@ export default function Draw({ drawedObjects, node }) {
 
   function openNav(name, types, id) {
     const navWidth = 200
-    console.log("open nav id", id)
     dispatch(openMenu(name, navWidth, types, id))
   }
 
@@ -38,20 +37,15 @@ export default function Draw({ drawedObjects, node }) {
 
   const handleClicks = () => {
     if (clickTimeout !== null) {
-      console.log("double click executes")
       deleteLast()
       clearTimeout(clickTimeout)
-      // dispatch(updatePosition(-500, -500))
       closeNav()
       clickTimeout = null
     } else {
-      console.log("single click")
       clickTimeout = setTimeout(() => {
-        console.log("first click executes ")
-        // open menu
         clearTimeout(clickTimeout)
         clickTimeout = null
-      }, 1000)
+      }, 200)
     }
   }
 
@@ -67,7 +61,6 @@ export default function Draw({ drawedObjects, node }) {
     if (lastId === shape.id) {
       return (
         <text
-          //if shape id === lastid then display
           onClick={() => openBubbleMenu(shape.x, shape.y, shape.width)}
           className='svg-text'
           x={shape.x + shape.width}
@@ -116,11 +109,11 @@ export default function Draw({ drawedObjects, node }) {
             )
           }
           if (shape.type === "rect") {
+            let { title } = shape.formValues || {}
             return (
               <g>
                 <rect
                   onClick={() => openNav(shape.name, shape.types, shape.id)}
-                  // onDoubleClick={() => closeNav()}
                   className='rectangle'
                   x={shape.x}
                   y={shape.y - shape.width / 2}
@@ -140,6 +133,18 @@ export default function Draw({ drawedObjects, node }) {
                   letter-spacing='1.5'
                 >
                   {shape.text}
+                </text>
+                <text
+                  x={shape.x + shape.width / 2}
+                  y={shape.y + shape.height / 4}
+                  font-size='12'
+                  dominant-baseline='middle'
+                  stroke='white'
+                  text-anchor='middle'
+                  font-family='sans-serif'
+                  letter-spacing='1.5'
+                >
+                  {title && title}
                 </text>
               </g>
             )
