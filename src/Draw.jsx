@@ -94,7 +94,7 @@ export default function Draw({ drawedObjects, node }) {
             <path d='M0,0 L0,6 L9,3 z' fill='red' />
           </marker>
         </defs>
-        {map(drawedObjects[node].shapes, (shape, id) => {
+        {map(drawedObjects[node].shapes, (shape, _id) => {
           if (shape.type === "line") {
             return (
               <line
@@ -108,7 +108,7 @@ export default function Draw({ drawedObjects, node }) {
             )
           }
           if (shape.type === "rect") {
-            const { title } = shape.formValues || {}
+            const { title = "" } = shape.formValues || {}
             return (
               <g>
                 <rect
