@@ -10,25 +10,25 @@ export default function FormGenerator({ formData, formValues, objectId }) {
     const id = objectId
     dispatch(updateObjectOptions(id, value, inputName))
   }
-
-  formData = {
-    "key": "hodnota",
-    "key2": "hodnota2"
-  }
+  console.log(formData)
+  // formData = {
+  //   "key": "hodnota",
+  //   "key2": "hodnota2"
+  // }
 
   /**
    * ["hodnota", "hodnota2"]
    * 0,1,2....
    * 0, 1
-   * 
+   *
    * key, key2
    */
-
 
   return (
     <div>
       <form className='form' onChange={submitForm}>
-        {map(formData, (key, value) => {
+        {map(formData, (value, key) => {
+          console.log("This is the key and value", value, key)
           if (value.type === "Select") {
             const { options } = value || {}
 

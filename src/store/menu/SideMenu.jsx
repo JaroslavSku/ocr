@@ -11,6 +11,7 @@ export default function SideMenu({ closeNav }) {
     useSelector((state) =>
       find(state.draw[0].shapes, (shape) => shape.id === id)
     ) || {}
+  console.log("Data in form generator", formData)
   return (
     <div style={{ width: navWidth }} id='mySidenav' className='sidenav'>
       <a className='closebtn' onClick={closeNav}>
