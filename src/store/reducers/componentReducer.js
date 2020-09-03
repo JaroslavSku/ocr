@@ -123,10 +123,10 @@ const initialState = [
 ]
 
 const componentReducer = (state = initialState, action) => {
+  const { name = "" } = action
+  const components = { ...state }
   switch (action.type) {
     case "ENABLE_BUTTON":
-      const { name } = action
-      const components = { ...state }
       const componentEnableID = find(
         components,
         (component) => component.name === name
