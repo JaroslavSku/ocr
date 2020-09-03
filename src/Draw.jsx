@@ -52,7 +52,6 @@ export default function Draw({ drawedObjects, node }) {
   function deleteLast() {
     if (lastId > 0) {
       dispatch(deleteLastObject(lastId))
-      console.log("delete last called", lastId)
       dispatch(disableButton(lastId, name))
     }
   }
@@ -109,7 +108,7 @@ export default function Draw({ drawedObjects, node }) {
             )
           }
           if (shape.type === "rect") {
-            let { title } = shape.formValues || {}
+            const { title } = shape.formValues || {}
             return (
               <g>
                 <rect

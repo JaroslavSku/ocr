@@ -15,7 +15,6 @@ export function sendJSON() {
       formValues,
     }
   })
-  console.log(sentData)
   return (dispatch) => {
     axios.post(
       "https://run.mocky.io/v3/4a62d65d-d272-43ac-ad0e-5a070f4fb179",
@@ -44,7 +43,7 @@ export const acceptJSON = () => (dispatch) => {
 export const saveFormRequirements = () => (dispatch) => {
   return new Promise((resolve, reject) => {
     axios
-      .get("https://run.mocky.io/v3/4852c9b7-d018-4ad2-8011-c730d2470518", {
+      .get("https://run.mocky.io/v3/b67dc4ad-906c-4ce2-9516-fa57434e8116", {
         headers: {
           "Content-Type": "application/json",
         },

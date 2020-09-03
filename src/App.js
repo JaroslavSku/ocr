@@ -5,7 +5,7 @@ import Draw from "./Draw"
 import { map, forEach, filter } from "lodash"
 import { useSelector, useDispatch } from "react-redux"
 import { handleButtons } from "./store/actions/componentActions"
-import { closeMenu, formDataLoaded } from "./store/actions/menuAction"
+import { closeMenu, hideBubbleMenu } from "./store/actions/menuAction"
 import { addObject } from "./store/actions/drawedObjectsActions"
 import { show } from "redux-modal"
 import OrderFinishedModal from "./store/modals/OrderFinishedModal"
@@ -34,12 +34,6 @@ function App() {
               formDefaultValues,
             }) => {
               if (importedObject.name === name) {
-                console.log(
-                  "component name",
-                  name,
-                  "formdata",
-                  formDefaultValues
-                )
                 addCustomRectangle(
                   color,
                   name,
@@ -85,6 +79,7 @@ function App() {
     await dispatch(handleButtons(position, name))
     checkIfFinished(name)
     dispatch(closeMenu())
+    dispatch(hideBubbleMenu())
   }
 
   function checkIfFinished(name) {
@@ -114,7 +109,7 @@ function App() {
             formDefaultValues,
           }) => {
             return (
-              position > 1 && ( // mozna jen undefined
+              position && ( // mozna jen undefined
                 <div>
                   <button
                     className='shapes-button'

@@ -1,7 +1,7 @@
 import React from "react"
-import { map, find } from "lodash"
+import { map } from "lodash"
 import { updateObjectOptions } from "../../actions/drawedObjectsActions"
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 
 export default function FormGenerator({ formData, formValues, objectId }) {
   const dispatch = useDispatch()
@@ -11,11 +11,24 @@ export default function FormGenerator({ formData, formValues, objectId }) {
     dispatch(updateObjectOptions(id, value, inputName))
   }
 
+  formData = {
+    "key": "hodnota",
+    "key2": "hodnota2"
+  }
+
+  /**
+   * ["hodnota", "hodnota2"]
+   * 0,1,2....
+   * 0, 1
+   * 
+   * key, key2
+   */
+
+
   return (
     <div>
       <form className='form' onChange={submitForm}>
-        {map(Object.entries(formData), ([key, value]) => {
-          console.log("Key and value", key, value)
+        {map(formData, (key, value) => {
           if (value.type === "Select") {
             const { options } = value || {}
 

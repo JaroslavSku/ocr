@@ -1,4 +1,4 @@
-import { updatePosition } from "./menuAction"
+import { hideBubbleMenu } from "./menuAction"
 
 export const addObject = (
   lastId,
@@ -11,7 +11,6 @@ export const addObject = (
   formData,
   formDefaultValues
 ) => {
-  console.log("these are form default values", formDefaultValues)
   return (dispatch) => {
     dispatch({
       type: "ADD_OBJECT",
@@ -44,7 +43,7 @@ export const updateObjectOptions = (id, value, inputName) => {
 export const deleteLastObject = (lastId) => {
   return (dispatch) => {
     if (lastId > 1) {
-      dispatch(updatePosition(-500, -500))
+      dispatch(hideBubbleMenu())
       dispatch({
         type: "DELETE_OBJECT",
       })

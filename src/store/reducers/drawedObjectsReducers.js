@@ -33,6 +33,18 @@ const drawedObjectsReducer = (state = initialState, action) => {
   let newShapes = []
   localStorage.setItem("drawedObjects", JSON.stringify(state))
   switch (action.type) {
+    case "SAVE_OPTION":
+      const { objectId, inputName, optionValue } = action
+      const index = findIndex(state[initialNode].shapes, ["id", objectId])
+      let newState = { ...state }
+      newState[initialNode].shapes[index]["formValues"][inputName] = optionValue
+      console.log(newState)
+      console.log(state)
+      return {
+        ...state,
+        ...newState,
+      }
+
     case "ADD_OBJECT":
       const {
         position,
@@ -69,18 +81,6 @@ const drawedObjectsReducer = (state = initialState, action) => {
           xValue: newXwithWidth,
           shapes: newShapes,
         },
-      }
-
-    case "SAVE_OPTION":
-      const { objectId, inputName, optionValue } = action
-      const index = findIndex(state[initialNode].shapes, ["id", objectId])
-      let newState = state
-      newState[initialNode].shapes[index]["formValues"][inputName] = optionValue
-      // newState[initialNode]["new"] = "bla"
-      console.log(newState)
-      return {
-        ...state,
-        ...newState,
       }
 
     case "DELETE_OBJECT":

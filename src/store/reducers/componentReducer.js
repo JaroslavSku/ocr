@@ -3,7 +3,7 @@ import { forEach, find } from "lodash"
 const initialState = [
   {
     id: 1,
-    position: 1,
+    // position: 1,
     prerequisite: 0,
     type: "circle",
     name: "Start",
@@ -123,9 +123,6 @@ const initialState = [
 ]
 
 const componentReducer = (state = initialState, action) => {
-  // const { name } = action
-  // const components = { ...state }
-
   switch (action.type) {
     case "ENABLE_BUTTON":
       const { name } = action
@@ -170,14 +167,14 @@ const componentReducer = (state = initialState, action) => {
         ...components,
       }
 
-    case "DISABLE_ALL":
-      forEach(components, (component) => {
-        component.disabled = true
-      })
-      return {
-        ...state,
-        ...components,
-      }
+    // case "DISABLE_ALL":
+    //   forEach(components, (component) => {
+    //     component.disabled = true
+    //   })
+    //   return {
+    //     ...state,
+    //     ...components,
+    //   }
     case "SAVE_FORMDATA":
       const { componentsFormData } = action
       const newComponents = { ...state }

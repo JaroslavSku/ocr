@@ -40,7 +40,14 @@ const menuReducer = (state = initialState, action) => {
           navWidth: 0,
         },
       }
-
+    case "HIDE_BUBBLEMENU":
+      return {
+        ...state,
+        bubbleMenu: {
+          xPosition: -500,
+          yPosition: -500,
+        },
+      }
     case "FORMDATA_LOADED":
       return {
         ...state,

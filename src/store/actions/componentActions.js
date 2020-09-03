@@ -1,4 +1,4 @@
-import { updatePosition } from "./menuAction"
+import { hideBubbleMenu } from "./menuAction"
 
 export function enableButton(positionId, name) {
   return (dispatch) => {
@@ -31,7 +31,7 @@ export function disableAll() {
 export function handleButtons(position, name) {
   return (dispatch) => {
     if (name === "GenerateOutput") {
-      dispatch(updatePosition(-500, -500))
+      dispatch(hideBubbleMenu())
       dispatch(disableAll())
     }
     if (name !== "IF" && name !== "GenerateOutput") {

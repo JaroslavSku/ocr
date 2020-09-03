@@ -23,7 +23,7 @@ export const generateShapes = (
   formData,
   formValues
 ) => {
-  console.log("These are the formvalues", name, formValues)
+  const newFormValues = { ...formValues }
   return {
     position,
     type,
@@ -37,7 +37,6 @@ export const generateShapes = (
     types,
     id,
     formData,
-    // formValues: {},
-    formValues,
+    formValues: newFormValues,
   }
 }

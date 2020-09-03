@@ -1,5 +1,4 @@
 export function updatePosition(x, y) {
-  console.log("These are menu action val", x, y)
   return (dispatch) => {
     dispatch({
       type: "UPDATE_POSITION",
@@ -33,6 +32,14 @@ export function formDataLoaded() {
   return (dispatch) => {
     dispatch({
       type: "FORMDATA_LOADED",
+    })
+  }
+}
+
+export function hideBubbleMenu() {
+  return (dispatch) => {
+    dispatch({
+      type: "HIDE_BUBBLEMENU",
     })
   }
 }
