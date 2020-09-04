@@ -1,9 +1,8 @@
-import { forEach, find } from "lodash"
+import { forEach, find, isArray } from "lodash"
 
 const initialState = [
   {
     id: 1,
-    // position: 1,
     prerequisite: 0,
     type: "circle",
     name: "Start",
@@ -26,14 +25,12 @@ const initialState = [
     type: "rect",
     name: "ChooseParser",
     color: "darkgrey",
-    types: ["XML", "XLS", "Text", "PDF"],
-    optionValue: "XML",
     disabled: false,
   },
   {
     id: 4,
     position: 4,
-    prerequisite: 3,
+    prerequisite: [3, 2],
     type: "rect",
     name: "GenerateXML",
     color: "darkgrey",
@@ -132,13 +129,27 @@ const componentReducer = (state = initialState, action) => {
         (component) => component.name === name
       )
       forEach(components, (component) => {
-        if (
-          component.prerequisite <= componentEnableID.id &&
-          component.id >= componentEnableID.id
-        ) {
-          component.disabled = false
-        } else if (component.id < componentEnableID.id) {
-          component.disabled = true
+        const { prerequisite } = component
+        if (Array.isArray(prerequisite)) {
+          forEach(prerequisite, (oneCondition) => {
+            if (
+              oneCondition <= componentEnableID.id &&
+              component.id >= componentEnableID.id
+            ) {
+              component.disabled = false
+            } else if (component.id < componentEnableID.id) {
+              component.disabled = true
+            }
+          })
+        } else {
+          if (
+            component.prerequisite <= componentEnableID.id &&
+            component.id >= componentEnableID.id
+          ) {
+            component.disabled = false
+          } else if (component.id < componentEnableID.id) {
+            component.disabled = true
+          }
         }
       })
       return {
@@ -153,13 +164,27 @@ const componentReducer = (state = initialState, action) => {
       console.log("this is the name of the object to be deleted", name)
       console.log(componentDisableId)
       forEach(components, (component) => {
-        if (component.prerequisite > componentDisableId.id) {
-          component.disabled = true
-        } else if (
-          component.id >= componentDisableId.id &&
-          component.prerequisite <= componentDisableId.id
-        ) {
-          component.disabled = false
+        const { prerequisite } = component
+        if (Array.isArray(prerequisite)) {
+          forEach(prerequisite, (oneCondition) => {
+            if (oneCondition > componentDisableId.id) {
+              component.disabled = true
+            } else if (
+              component.id >= componentDisableId.id &&
+              oneCondition <= componentDisableId.id
+            ) {
+              component.disabled = false
+            }
+          })
+        } else {
+          if (component.prerequisite > componentDisableId.id) {
+            component.disabled = true
+          } else if (
+            component.id >= componentDisableId.id &&
+            component.prerequisite <= componentDisableId.id
+          ) {
+            component.disabled = false
+          }
         }
       })
       return {

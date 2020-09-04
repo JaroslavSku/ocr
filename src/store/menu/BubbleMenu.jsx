@@ -10,6 +10,7 @@ import { acceptJSON, saveFormRequirements } from "../actions/apiJSON"
 export default function BubbleMenu() {
   const components = useSelector((state) => state.components)
   const drawedObjects = useSelector((state) => state.draw)
+  const formDataLoaded = useSelector((state) => state.form.formDataLoaded)
   const dispatch = useDispatch()
 
   function checkIfFinished(name) {
@@ -45,7 +46,7 @@ export default function BubbleMenu() {
   }
 
   useEffect(() => {
-    dispatch(saveFormRequirements()).then(
+    if (formDataLoaded) {
       dispatch(acceptJSON()).then(({ data: { objects } }) => {
         forEach(objects, (importedObject) => {
           filter(components, (component) => {
@@ -55,8 +56,8 @@ export default function BubbleMenu() {
           })
         })
       })
-    )
-  }, [])
+    }
+  }, [formDataLoaded])
 
   return (
     <>

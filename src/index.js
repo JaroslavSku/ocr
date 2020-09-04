@@ -1,21 +1,22 @@
-import React, { useEffect } from "react"
+import React from "react"
 import ReactDOM from "react-dom"
 import "./index.css"
 import App from "./App"
 import { reducer as modal } from "redux-modal"
 import * as serviceWorker from "./serviceWorker"
-import { Provider, useDispatch } from "react-redux"
+import { Provider } from "react-redux"
 import { combineReducers, compose, applyMiddleware, createStore } from "redux"
 import menuReducer from "./store/reducers/menuReducer"
 import thunk from "redux-thunk"
 import componentReducer from "./store/reducers/componentReducer"
 import drawedObjectsReducer from "./store/reducers/drawedObjectsReducers"
-import { acceptJSON } from "./store/actions/apiJSON"
+import formDataReducer from "./store/reducers/formDataReducer"
 
 const rootReducer = combineReducers({
   menu: menuReducer,
   components: componentReducer,
   draw: drawedObjectsReducer,
+  form: formDataReducer,
   modal,
 })
 

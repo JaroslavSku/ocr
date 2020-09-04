@@ -52,6 +52,7 @@ export const saveFormRequirements = () => (dispatch) => {
         dispatch({
           type: "SAVE_FORMDATA",
           componentsFormData: data,
+          dataLoaded: true,
         })
         resolve(data)
       })
