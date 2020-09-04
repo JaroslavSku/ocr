@@ -43,7 +43,7 @@ export const acceptJSON = () => (dispatch) => {
 export const saveFormRequirements = () => (dispatch) => {
   return new Promise((resolve, reject) => {
     axios
-      .get("https://run.mocky.io/v3/b67dc4ad-906c-4ce2-9516-fa57434e8116", {
+      .get("https://run.mocky.io/v3/6b29f67c-abc4-4cab-bf7d-e35840cb2288", {
         headers: {
           "Content-Type": "application/json",
         },
