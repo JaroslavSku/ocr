@@ -161,8 +161,6 @@ const componentReducer = (state = initialState, action) => {
         components,
         (component) => component.name === name
       )
-      console.log("this is the name of the object to be deleted", name)
-      console.log(componentDisableId)
       forEach(components, (component) => {
         const { prerequisite } = component
         if (Array.isArray(prerequisite)) {
@@ -191,19 +189,9 @@ const componentReducer = (state = initialState, action) => {
         ...state,
         ...components,
       }
-
-    // case "DISABLE_ALL":
-    //   forEach(components, (component) => {
-    //     component.disabled = true
-    //   })
-    //   return {
-    //     ...state,
-    //     ...components,
-    //   }
     case "SAVE_FORMDATA":
       const { componentsFormData } = action
       const newComponents = { ...state }
-      console.log("Runned the action SAVE DATA")
       forEach(newComponents, (component) => {
         forEach(componentsFormData, (componentFormData) => {
           if (component.name === componentFormData.name) {
@@ -212,7 +200,6 @@ const componentReducer = (state = initialState, action) => {
           }
         })
       })
-      console.log("TEst components", newComponents, componentsFormData)
       return {
         ...state,
         ...newComponents,

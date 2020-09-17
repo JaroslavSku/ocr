@@ -38,8 +38,6 @@ const drawedObjectsReducer = (state = initialState, action) => {
       const index = findIndex(state[initialNode].shapes, ["id", objectId])
       let newState = { ...state }
       newState[initialNode].shapes[index]["formValues"][inputName] = optionValue
-      console.log(newState)
-      console.log(state)
       return {
         ...state,
         ...newState,
