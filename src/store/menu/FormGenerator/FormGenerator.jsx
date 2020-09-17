@@ -15,7 +15,6 @@ export default function FormGenerator({ formData, formValues, objectId }) {
     <div>
       <form className='form' onChange={submitForm}>
         {map(formData, (value, key) => {
-          console.log("This is the key and value", value, key)
           if (value.type === "Select") {
             const { options = {} } = value || {}
 
