@@ -76,7 +76,7 @@ export default function Draw({ drawedObjects, node }) {
     <div>
       <SideMenu closeNav={closeNav} />
       <svg
-        className='svg-container'
+        className='graph'
         onClick={handleClicks}
         width={drawedObjects[0].xValue + 200}
         height='80rem'
@@ -110,10 +110,10 @@ export default function Draw({ drawedObjects, node }) {
           if (shape.type === "rect") {
             const { title = "" } = shape.formValues || {}
             return (
-              <g>
+              <g className="method__group">
                 <rect
                   onClick={() => openNav(shape.name, shape.types, shape.id)}
-                  className='rectangle'
+                  className='method__item'
                   x={shape.x}
                   y={shape.y - shape.width / 2}
                   height={shape.height}
@@ -124,9 +124,9 @@ export default function Draw({ drawedObjects, node }) {
                 <text
                   x={shape.x + shape.width / 2}
                   y={shape.y}
+                  className="method__title"
                   font-size='12'
                   dominant-baseline='middle'
-                  stroke='white'
                   text-anchor='middle'
                   font-family='sans-serif'
                   letter-spacing='1.5'
@@ -137,8 +137,8 @@ export default function Draw({ drawedObjects, node }) {
                   x={shape.x + shape.width / 2}
                   y={shape.y + shape.height / 4}
                   font-size='12'
+                  className="method__desc"
                   dominant-baseline='middle'
-                  stroke='white'
                   text-anchor='middle'
                   font-family='sans-serif'
                   letter-spacing='1.5'
@@ -154,8 +154,8 @@ export default function Draw({ drawedObjects, node }) {
             a 25,25 0 1,1 -${shape.width},0`
             const circleText = shape.name === "GenerateOutput" ? "End" : "Start"
             return (
-              <g>
-                <path className='rectangle' d={path} />
+              <g className="start__group">
+                <path className='start__item' d={path} />
                 <text
                   onClick={() => openBubbleMenu(shape.x, shape.y, shape.width)}
                   className='svg-text'
@@ -169,9 +169,9 @@ export default function Draw({ drawedObjects, node }) {
                 <text
                   x={shape.x + shape.width / 2}
                   y={shape.y}
+                  className="start__title"
                   font-size='12'
                   dominant-baseline='middle'
-                  stroke='white'
                   text-anchor='middle'
                   font-family='sans-serif'
                   letter-spacing='1.5'
@@ -188,9 +188,9 @@ export default function Draw({ drawedObjects, node }) {
             const polygonValues = `${xValueBase} 140, ${xValueRight} 200,${xValueBase} 260, ${xValueLeft} 200`
 
             return (
-              <g>
+              <g className="graph__element">
                 <polygon
-                  className='rectangle'
+                  className='graph__element__item'
                   points={polygonValues}
                   fill={shape.fill}
                 />
@@ -207,9 +207,9 @@ export default function Draw({ drawedObjects, node }) {
                 <text
                   x={shape.x + shape.width / 2}
                   y={shape.y}
+                  className="graph__element__title"
                   font-size='12'
                   dominant-baseline='middle'
-                  stroke='white'
                   text-anchor='middle'
                   font-family='sans-serif'
                   letter-spacing='1.5'
@@ -238,7 +238,7 @@ export default function Draw({ drawedObjects, node }) {
                     y={shape.y + shape.width * 1.6}
                     font-size='12'
                     dominant-baseline='middle'
-                    stroke='white'
+                    className="graph__element__title"
                     text-anchor='middle'
                     font-family='sans-serif'
                     letter-spacing='1.5'

@@ -17,7 +17,7 @@ function App() {
   }, [])
 
   return (
-    <div className='App'>
+    <>
       <OrderFinishedModal />
       <div
         style={{ left: xPosition, top: yPosition }}
@@ -28,7 +28,7 @@ function App() {
       <div className='shapes-drawings'>
         <Draw drawedObjects={drawedObjects} node={0} />
       </div>
-    </div>
+    </>
   )
 }
 
